@@ -14,18 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -61,7 +49,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    meetings         Meeting[]
+    participants Participant[]
 }
 
 model VerificationToken {
@@ -70,4 +59,32 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Meeting {
+    id String @id @default(cuid())
+    hostId String
+    user User @relation(fields: [hostId], references: [id])
+    participants Participant[]
+    recordings Recording[]
+    
+    @@index([hostId])
+}
+
+
+model Participant {
+    id String @id @default(cuid())
+    userId String 
+    user User @relation(fields: [userId], references: [id])
+    meetingId String
+    meeting Meeting @relation(fields: [meetingId], references: [id])
+    
+    @@index([meetingId])
+    @@index([userId])
+}
+
+model Recording {
+    id String @id @default(cuid())
+    meetingId String
+    meeting Meeting @relation(fields: [meetingId], references: [id])
 }
