@@ -21,9 +21,6 @@ const formSchema = z.object({
 })
 
 
-
-
-
 export function SignInForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,26 +38,50 @@ export function SignInForm() {
   }
 
   return (
+    <>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-48 h-72">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormItem>
+              <FormLabel>email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input 
+                placeholder="email" 
+                {...field} 
+                />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
+             
               <FormMessage />
             </FormItem>
           )}
-        />
+          />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+              <FormItem>
+              <FormLabel>password</FormLabel>
+              <FormControl>
+                <Input 
+                type="password"
+                placeholder="Password" 
+                {...field} 
+                />
+              </FormControl>
+              
+              <FormMessage />
+            </FormItem>
+          )}
+          />
         <Button type="submit">Submit</Button>
       </form>
     </Form>
+    <div>
+        Hello
+    </div>
+          </>
   )
 }
