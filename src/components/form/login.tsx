@@ -3,7 +3,7 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { Button } from "../ui/button"
 import {
   Form,
   FormControl,
@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "../ui/form"
+import { Input } from "../ui/input"// relative file path manga
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -45,7 +45,7 @@ export function SignInForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
