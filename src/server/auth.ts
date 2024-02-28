@@ -5,7 +5,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google"
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -48,6 +48,26 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
+    CredentialsProvider({
+      name: "sign-in",
+      
+      credentials: {
+        email: { label: "email", type: "text", placeholder: "ani@gmail.com" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials || !credentials.email || !credentials.password){
+  
+          return null
+        }
+        
+
+
+        
+
+        return null;
+      }
+    }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
