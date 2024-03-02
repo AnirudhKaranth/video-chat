@@ -45,7 +45,8 @@ export const userRouter = createTRPCRouter({
       return {
         email:user.email,
         id: user.id,
-        isVerified:user.emailVerified
+
+        // isVerified:user.emailVerified
       }
     }),
 

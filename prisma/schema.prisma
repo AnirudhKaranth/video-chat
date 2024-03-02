@@ -47,6 +47,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    password String?
     accounts      Account[]
     sessions      Session[]
     meetings         Meeting[]
@@ -54,11 +55,12 @@ model User {
 }
 
 model VerificationToken {
-    identifier String
+    identifier String @id @default(cuid())
     token      String   @unique
     expires    DateTime
+    email      String
 
-    @@unique([identifier, token])
+    @@unique([identifier, token, email])
 }
 
 model Meeting {

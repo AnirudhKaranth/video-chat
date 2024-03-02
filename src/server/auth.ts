@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { compare } from "bcryptjs";
 import {
   getServerSession,
   type DefaultSession,
@@ -6,6 +7,7 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
+import Email from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google"
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -60,12 +62,32 @@ export const authOptions: NextAuthOptions = {
   
           return null
         }
-        
+
+        const userExists = await db.user.findUnique({
+          where:{
+            email:credentials.email
+          }
+        })
+
+        if(!userExists || !userExists.password){
+          return null
+        }
 
 
-        
+        const isPasswordCorrect = await compare(
+          credentials.password,
+          userExists.password
+        )
 
-        return null;
+        if (!isPasswordCorrect) {
+          return null
+        }
+
+        return {
+          id: `${userExists.id}`,
+          username: userExists.name,
+          email: userExists.email,
+        }
       }
     }),
     GoogleProvider({
