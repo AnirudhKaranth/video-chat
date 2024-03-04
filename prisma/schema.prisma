@@ -6,12 +6,9 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
 }
 
 // Necessary for Next auth
@@ -42,20 +39,20 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
-    password String?
+    password      String?
     accounts      Account[]
     sessions      Session[]
-    meetings         Meeting[]
-    participants Participant[]
+    meetings      Meeting[]
+    participants  Participant[]
 }
 
 model VerificationToken {
-    identifier String @id @default(cuid())
+    identifier String   @id @default(cuid())
     token      String   @unique
     expires    DateTime
     email      String
@@ -64,29 +61,28 @@ model VerificationToken {
 }
 
 model Meeting {
-    id String @id @default(cuid())
-    hostId String
-    user User @relation(fields: [hostId], references: [id])
+    id           String        @id @default(cuid())
+    hostId       String
+    user         User          @relation(fields: [hostId], references: [id])
     participants Participant[]
-    recordings Recording[]
-    
+    recordings   Recording[]
+
     @@index([hostId])
 }
 
-
 model Participant {
-    id String @id @default(cuid())
-    userId String 
-    user User @relation(fields: [userId], references: [id])
+    id        String  @id @default(cuid())
+    userId    String
+    user      User    @relation(fields: [userId], references: [id])
     meetingId String
-    meeting Meeting @relation(fields: [meetingId], references: [id])
-    
+    meeting   Meeting @relation(fields: [meetingId], references: [id])
+
     @@index([meetingId])
     @@index([userId])
 }
 
 model Recording {
-    id String @id @default(cuid())
+    id        String  @id @default(cuid())
     meetingId String
-    meeting Meeting @relation(fields: [meetingId], references: [id])
+    meeting   Meeting @relation(fields: [meetingId], references: [id])
 }

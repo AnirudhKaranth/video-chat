@@ -15,6 +15,10 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input"; // relative file path manga
 import { FcGoogle } from "react-icons/fc";
+import { api } from "~/trpc/react";
+import {toast} from 'sonner'
+import { useRouter } from "next/navigation";
+
 
 const formSchema = z.object({
   username: z.string().min(2),
@@ -23,6 +27,8 @@ const formSchema = z.object({
 });
 
 export function SignUpForm() {
+
+  const router=useRouter()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,10 +38,24 @@ export function SignUpForm() {
       password: "",
     },
   });
+  const signUP =  api.user.signup.useMutation({
+    onError:(error)=>{
+      toast.error(error.message)
+    },
+    onSuccess:(data)=>{
+      toast.success("Successfully registered")
+      router.push("/auth/login")
+    }
+  }) 
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const onSubmit = async(values: z.infer<typeof formSchema>) =>{
+    await signUP.mutateAsync({
+      name:values.username, email:values.email, password:values.password
+    }).catch((error)=>{
+      console.log(error)
+    })
+
   }
 
   return (

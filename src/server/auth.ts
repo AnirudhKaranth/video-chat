@@ -7,7 +7,6 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
-import Email from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google"
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -47,47 +46,50 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+    
+    
+  },
+  session:{
+    strategy:"jwt"
   },
   adapter: PrismaAdapter(db) as Adapter,
+ 
   providers: [
     CredentialsProvider({
-      name: "sign-in",
+      name: "Credentials",
       
       credentials: {
-        email: { label: "email", type: "text", placeholder: "ani@gmail.com" },
-        password: { label: "Password", type: "password" }
+        email: {  type: "text" },
+        password: { type: "password" }
       },
       async authorize(credentials) {
         if (!credentials || !credentials.email || !credentials.password){
   
           return null
         }
+        console.log(credentials)
 
-        const userExists = await db.user.findUnique({
+        const user = await db.user.findUnique({
           where:{
             email:credentials.email
           }
         })
 
-        if(!userExists || !userExists.password){
+        if(!user || !user.password){
           return null
         }
 
 
         const isPasswordCorrect = await compare(
           credentials.password,
-          userExists.password
+          user.password
         )
 
         if (!isPasswordCorrect) {
           return null
         }
 
-        return {
-          id: `${userExists.id}`,
-          username: userExists.name,
-          email: userExists.email,
-        }
+        return user
       }
     }),
     GoogleProvider({

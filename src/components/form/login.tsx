@@ -14,6 +14,9 @@ import {
   FormMessage,
 } from "../ui/form"
 import { Input } from "../ui/input"// relative file path manga
+import {signIn, signOut} from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -31,10 +34,23 @@ export function SignInForm() {
     },
   })
 
+  const router=useRouter()
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async(values: z.infer<typeof formSchema>)=> {
     
-    console.log(values)
+    
+    const userdata = await signIn("credentials",{
+      redirect: false,
+      email: values.email,
+      password: values.password,
+      
+    })
+    if(!userdata?.ok){
+      toast("Try again")
+
+    }else{
+      router.push('/')
+    }
   }
 
   return (
@@ -81,6 +97,7 @@ export function SignInForm() {
     </Form>
     <div>
         Hello
+        <button type="button" onClick={async ()=> await signOut()}>logout</button>
     </div>
           </>
   )

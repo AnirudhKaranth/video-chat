@@ -1,19 +1,18 @@
-import { unstable_noStore as noStore } from "next/cache";
-import Link from "next/link";
 
-import { CreatePost } from "~/app/_components/create-post";
-import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
+import Link from "next/link";
+import {  getServerAuthSession} from "~/server/auth";
 
 export default async function Home() {
-  noStore();
+
   const session = await getServerAuthSession();
+  console.log(session)
 
   return (
     <>
       <div>
         Home Page
-        <Link href={"/signup-"}> sign up</Link>
+        <Link href={"/auth/signup"}> sign up</Link>
+  
       </div>
     </>
     
