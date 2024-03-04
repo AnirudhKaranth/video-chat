@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
-    directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url = env("DATABASE_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 // Necessary for Next auth
@@ -30,13 +30,13 @@ model Account {
     @@unique([provider, providerAccountId])
 }
 
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+// model Session {
+//     id           String   @id @default(cuid())
+//     sessionToken String   @unique
+//     userId       String
+//     expires      DateTime
+//     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
 
 model User {
     id            String        @id @default(cuid())
@@ -46,7 +46,6 @@ model User {
     image         String?
     password      String?
     accounts      Account[]
-    sessions      Session[]
     meetings      Meeting[]
     participants  Participant[]
 }
