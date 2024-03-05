@@ -1,19 +1,23 @@
+import HomePage from "~/components/home/home";
+import { getServerAuthSession } from "~/server/auth";
 
-import Link from "next/link";
-import {  getServerAuthSession} from "~/server/auth";
+export type SessionType={
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    id?: string | null;
+    isOAuth?: boolean | null;
+  };
+}
 
 export default async function Home() {
-
   const session = await getServerAuthSession();
   console.log(session)
 
   return (
     <>
-      <div>
-        Home Page
-        <Link href={"/auth/signup"}> sign up</Link>
-  
-      </div>
+      <HomePage session={session}/>
     </>
     
   );

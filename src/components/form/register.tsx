@@ -18,7 +18,10 @@ import { FcGoogle } from "react-icons/fc";
 import { api } from "~/trpc/react";
 import {toast} from 'sonner'
 import { useRouter } from "next/navigation";
-
+import {SessionType} from '../../app/page'
+import { FormError } from "../ui/form-error";
+import { FormSuccess } from "../ui/form-success";
+import { useState } from "react";
 
 const formSchema = z.object({
   username: z.string().min(2),
@@ -26,9 +29,12 @@ const formSchema = z.object({
   password: z.string(),
 });
 
-export function SignUpForm() {
+export function SignUpForm({ session }: { session: SessionType | null }) {
+  const [errorMsg,setErrorMsg] = useState <string | undefined>("");
+  const [successMsg,setSuccessMsg] = useState <string | undefined>("");
 
   const router=useRouter()
+  
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,10 +46,13 @@ export function SignUpForm() {
   });
   const signUP =  api.user.signup.useMutation({
     onError:(error)=>{
-      toast.error(error.message)
+      console.log("first")
+      setSuccessMsg("")
+      setErrorMsg("Invalid credentials")
     },
     onSuccess:(data)=>{
-      toast.success("Successfully registered")
+      setErrorMsg("")
+      setSuccessMsg("Sign up successful")
       router.push("/auth/login")
     }
   }) 
@@ -56,21 +65,23 @@ export function SignUpForm() {
       console.log(error)
     })
 
+    setErrorMsg("")
+    setSuccessMsg("")
+
   }
 
   return (
-    <div className="flex flex-col border-2 border-gray-100 rounded-md p-7">
-        <div className="w-full flex items-center justify-center">
-            <p>Sign Up</p>
+    <div className="flex flex-col border-2 border-gray-100 bg-white rounded-md p-7 shadow-sm">
+        <div className="w-full flex items-center justify-center mb-3">
+            <p className="text-2xl">Sign Up</p>
         </div>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col items-center justify-center">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col items-center justify-center gap-2">
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
               <FormItem>
-              <FormLabel>UserName</FormLabel>
               <FormControl>
                 <Input placeholder="Username" {...field} />
               </FormControl>
@@ -83,7 +94,6 @@ export function SignUpForm() {
           name="email"
           render={({ field }) => (
               <FormItem>
-              <FormLabel>email</FormLabel>
               <FormControl>
                 <Input placeholder="email" {...field} />
               </FormControl>
@@ -96,7 +106,6 @@ export function SignUpForm() {
           name="password"
           render={({ field }) => (
               <FormItem>
-              <FormLabel>password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="Password" {...field} />
               </FormControl>
@@ -104,11 +113,17 @@ export function SignUpForm() {
             </FormItem>
           )}
           />
+          <FormError message={errorMsg}/>
+          <FormSuccess message={successMsg}/>
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-    <div className="mt-4 w-full flex items-center justify-center" >
+    {/* <div className="mt-4 w-full flex items-center justify-center" >
     <FcGoogle fontSize={25}/>
+    </div> */}
+    <div className="mt-4 w-full flex items-center justify-center">
+    <button type="button" className="text-sm text-gray-500 hover:text-gray-600" onClick={async ()=> router.push("/auth/login")}>Already have an account? Login</button>
+
     </div>
     </div>
   );
