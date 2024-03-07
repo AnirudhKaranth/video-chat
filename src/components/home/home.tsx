@@ -1,23 +1,26 @@
 "use client"
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import {SessionType} from '../../app/page'
 import  Navbar from '../Navbar'
+import LoginPage from '~/app/auth/login/page'
+import { useRouter } from 'next/navigation'
+import { signOut, useSession } from 'next-auth/react'
 
 const HomePage = ({ session }: { session: SessionType | null }) => {
-    const router= useRouter()
-  
-  console.log(session)
-  if(session===null){
-    router.push("/auth/login")
-  }
+  const router = useRouter()
+
+  const handleLogout = async (): Promise<void> => {
+    await signOut();
+    console.log("first")
+    router.push('/auth/login');
+  };
+
   return (
     <div>
-        <Navbar/>
+        <Navbar handleLogout={handleLogout}/>
       
 
         Home Page
-        <Link href={"/auth/signup"}> sign up</Link>
   
       </div>
   )

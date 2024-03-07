@@ -2,9 +2,9 @@
 import { signOut } from 'next-auth/react'
 import React from 'react'
 
-const Navbar = () => {
+const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
   return (
-    <div className='w-full h-20 flex items-center justify-around'>
+    <div className='w-full h-20 flex items-center justify-around shadow-md'>
         <div>
             logo
         </div>
@@ -15,7 +15,7 @@ const Navbar = () => {
             contact
         </div>
         <div>
-        <button type="button" onClick={async ()=> await signOut()}>logout</button>
+        <button type="button" onClick={handleLogout}>logout</button>
         </div>
     </div>
   )

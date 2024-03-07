@@ -18,7 +18,7 @@ import { FcGoogle } from "react-icons/fc";
 import { api } from "~/trpc/react";
 import {toast} from 'sonner'
 import { useRouter } from "next/navigation";
-import {SessionType} from '../../app/page'
+import Home, {SessionType} from '../../app/page'
 import { FormError } from "../ui/form-error";
 import { FormSuccess } from "../ui/form-success";
 import { useState } from "react";
@@ -30,6 +30,7 @@ const formSchema = z.object({
 });
 
 export function SignUpForm({ session }: { session: SessionType | null }) {
+  
   const [errorMsg,setErrorMsg] = useState <string | undefined>("");
   const [successMsg,setSuccessMsg] = useState <string | undefined>("");
 
