@@ -25,7 +25,7 @@ const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   return at.toJwt();
 };
 
-const roomRouter = createTRPCRouter({
+export const roomRouter = createTRPCRouter({
   //Mutation to create a room
   createRoom: protectedProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.session.user.id;
