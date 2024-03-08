@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    provider  = "postgresql"
+    url       = env("DATABASE_URL") // uses connection pooling
+    directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 // Necessary for Next auth
@@ -40,13 +40,13 @@ model Account {
 
 model User {
     id            String        @id @default(cuid())
-    name          String?
-    email         String?       @unique
+    name          String
+    email         String        @unique
     emailVerified DateTime?
     image         String?
     password      String?
     accounts      Account[]
-    meetings      Meeting[]
+    rooms      Room[]
     participants  Participant[]
 }
 
@@ -59,10 +59,13 @@ model VerificationToken {
     @@unique([identifier, token, email])
 }
 
-model Meeting {
+model Room {
     id           String        @id @default(cuid())
     hostId       String
     user         User          @relation(fields: [hostId], references: [id])
+    metadata     String?       @db.Text
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
     participants Participant[]
     recordings   Recording[]
 
@@ -70,18 +73,18 @@ model Meeting {
 }
 
 model Participant {
-    id        String  @id @default(cuid())
     userId    String
     user      User    @relation(fields: [userId], references: [id])
-    meetingId String
-    meeting   Meeting @relation(fields: [meetingId], references: [id])
+    roomId String
+    Room   Room @relation(fields: [roomId], references: [id])
 
-    @@index([meetingId])
+    @@id([userId, roomId])
+    @@index([roomId])
     @@index([userId])
 }
 
 model Recording {
     id        String  @id @default(cuid())
-    meetingId String
-    meeting   Meeting @relation(fields: [meetingId], references: [id])
+    roomId String
+    Room   Room @relation(fields: [roomId], references: [id])
 }
