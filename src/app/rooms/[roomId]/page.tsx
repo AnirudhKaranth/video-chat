@@ -6,7 +6,7 @@ import LiveRoom from "~/components/videocall/LiveRoom";
 import { getServerAuthSession } from "~/server/auth";
 
 const page = async({params}:{params:{roomId:string}}) => {
-  const session = await getServerAuthSession();
+  // const session = await getServerAuthSession();
 
 
   const [joinIn, setjoinIn] = useState(false);
@@ -24,7 +24,7 @@ const page = async({params}:{params:{roomId:string}}) => {
          roomId={params.roomId}
          userChoices={userJoinChoices}
          OnDisconnected={() => setUserJoinChoices(undefined)}
-         userId={session?.user.id as string}></LiveRoom>
+         userId={"1"}></LiveRoom>
       ) : (
         <div className="h-3/4 w-3/5 flex flex-col gap-5 items-center justify-center overflow-hodden">
         Joining Room: abc

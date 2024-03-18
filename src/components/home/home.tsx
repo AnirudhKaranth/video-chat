@@ -23,7 +23,7 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
 
   const handleCreateRoom = async()=>{
     const response = await createRoom.mutateAsync()
-    router.push(`/rooms/?roomId=${response.roomName}`)
+    router.push(`/rooms/${response.roomName}`)
   }
 
   return (
