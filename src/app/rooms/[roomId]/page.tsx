@@ -1,12 +1,18 @@
-"use client"
-import { ControlBar, GridLayout, LiveKitRoom, LocalUserChoices, ParticipantTile, PreJoin, RoomAudioRenderer, useTracks } from "@livekit/components-react";
-import { Track } from "livekit-client";
+import { LocalUserChoices } from "@livekit/components-react";
+import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import LiveRoom from "~/components/videocall/LiveRoom";
-import { getServerAuthSession } from "~/server/auth";
+import Prejoin from "~/components/videocall/Prejoin";
+import { getCurrentUser } from "~/lib/session";
 
 const page = async({params}:{params:{roomId:string}}) => {
-  // const session = await getServerAuthSession();
+  const sessionUser= await getCurrentUser()
+  const router = useRouter()
+
+  if(!sessionUser || !sessionUser.id){
+    router.push("/auth/login")
+    return
+  }
 
 
   const [joinIn, setjoinIn] = useState(false);
@@ -24,16 +30,9 @@ const page = async({params}:{params:{roomId:string}}) => {
          roomId={params.roomId}
          userChoices={userJoinChoices}
          OnDisconnected={() => setUserJoinChoices(undefined)}
-         userId={"1"}></LiveRoom>
+         userId={sessionUser.id}></LiveRoom>
       ) : (
-        <div className="h-3/4 w-3/5 flex flex-col gap-5 items-center justify-center overflow-hodden">
-        Joining Room: abc
-        <PreJoin 
-          className="overflow-visible max-w-96 max-h-96"
-        >
-
-        </PreJoin>
-  </div>
+       <Prejoin/>
       )}
     </div>
   );
