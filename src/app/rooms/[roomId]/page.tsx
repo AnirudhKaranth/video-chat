@@ -1,3 +1,4 @@
+"use client"
 import { LocalUserChoices } from "@livekit/components-react";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -6,13 +7,13 @@ import Prejoin from "~/components/videocall/Prejoin";
 import { getCurrentUser } from "~/lib/session";
 
 const page = async({params}:{params:{roomId:string}}) => {
-  const sessionUser= await getCurrentUser()
-  const router = useRouter()
+  // const sessionUser= await getCurrentUser()
+  // const router = useRouter()
 
-  if(!sessionUser || !sessionUser.id){
-    router.push("/auth/login")
-    return
-  }
+  // if(!sessionUser || !sessionUser.id){
+  //   router.push("/auth/login")
+  //   return
+  // }
 
 
   const [joinIn, setjoinIn] = useState(false);
@@ -30,7 +31,7 @@ const page = async({params}:{params:{roomId:string}}) => {
          roomId={params.roomId}
          userChoices={userJoinChoices}
          OnDisconnected={() => setUserJoinChoices(undefined)}
-         userId={sessionUser.id}></LiveRoom>
+         userId={"1"}></LiveRoom>
       ) : (
        <Prejoin/>
       )}

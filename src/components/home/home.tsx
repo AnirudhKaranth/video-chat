@@ -29,9 +29,9 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   return (
     <div>
       <Navbar handleLogout={handleLogout} />
-      <div>
-        <button type="button" onClick={handleCreateRoom}>Create Meeting</button>
-        <button type="button" onClick={async()=>router.push("/rooms/join")}>Join Meeting</button>
+      <div className="flex justify-center pt-32 gap-6">
+        <button type="button" onClick={handleCreateRoom} className="mx-5 bg-blue-200 hover:bg-blue-400 p-2 rounded-md">Create Meeting</button>
+        <button type="button" onClick={async()=>router.push("/rooms/join")} className="mx-5 bg-blue-200 hover:bg-blue-400 p-2 rounded-md">Join Meeting</button>
       </div>
     </div>
   );

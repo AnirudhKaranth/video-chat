@@ -8,6 +8,18 @@ const Prejoin = () => {
         Joining Room: abc
         <PreJoin 
           className="overflow-visible max-w-96 max-h-96"
+          onError={(err) =>
+            console.log("Error while setting up prejoin", err)
+          }
+          defaults={{
+            username: "Ani",
+            videoEnabled: true,
+            audioEnabled: true,
+          }}
+          onSubmit={(values) => {
+            console.log("Joining with: ", values);
+            
+          }}
         >
 
         </PreJoin>

@@ -28,7 +28,6 @@ const LiveRoom = ({
        >
          {/* Your custom component with basic video conferencing functionality. */}
          <MyVideoConference />
-         {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
          <RoomAudioRenderer />
          {/* Controls for the user to start/stop audio, video, and screen
          share tracks and to leave the room. */}
