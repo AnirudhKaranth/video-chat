@@ -14,7 +14,7 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
 
   const createRoom= api.room.createRoom.useMutation();
 
-  const handleLogout = async (): Promise<void> => {
+ const handleLogout = async (): Promise<void> => {
     await signOut();
     console.log("first");
     router.push("/auth/login");
