@@ -2,7 +2,7 @@
 import { PreJoin } from '@livekit/components-react'
 import React from 'react'
 
-const Prejoin = () => {
+const Prejoin = ({roomId}:{roomId:string}) => {
   return (
     <div className="h-3/4 w-3/5 flex flex-col gap-5 items-center justify-center overflow-hodden">
         Joining Room: abc

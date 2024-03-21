@@ -1,41 +1,24 @@
-"use client"
+// "use client"
 import { LocalUserChoices } from "@livekit/components-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import LiveRoom from "~/components/videocall/LiveRoom";
 import Prejoin from "~/components/videocall/Prejoin";
+import Room from "~/components/videocall/Room";
 import { getCurrentUser } from "~/lib/session";
 
 const page = async({params}:{params:{roomId:string}}) => {
-  // const sessionUser= await getCurrentUser()
-  // const router = useRouter()
+  const sessionUser= await getCurrentUser()
+  const router = useRouter()
 
-  // if(!sessionUser || !sessionUser.id){
-  //   router.push("/auth/login")
-  //   return
-  // }
-
-
-  const [joinIn, setjoinIn] = useState(false);
-  const [userJoinChoices, setUserJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
-
-
-  const handlePrejoinValues = (e:FormEvent)=>{
-    e.preventDefault()
+  if(!sessionUser || !sessionUser.id){
+    redirect("/auth/login")
+    
   }
 
+
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      {joinIn ? (
-         <LiveRoom 
-         roomId={params.roomId}
-         userChoices={userJoinChoices}
-         OnDisconnected={() => setUserJoinChoices(undefined)}
-         userId={"1"}></LiveRoom>
-      ) : (
-       <Prejoin/>
-      )}
-    </div>
+   <Room params={params}/>
   );
 };
 
