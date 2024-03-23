@@ -1,7 +1,8 @@
 "use client"
 import { ControlBar, GridLayout, LiveKitRoom, LocalUserChoices, ParticipantTile, RoomAudioRenderer, useTracks } from '@livekit/components-react'
-import { Track } from 'livekit-client';
-import React from 'react'
+import { RoomOptions, Track } from 'livekit-client';
+import React, { useMemo } from 'react'
+import { api } from '~/trpc/react';
 
 type LiveRoomType = {
   roomId: string;
@@ -13,16 +14,36 @@ type LiveRoomType = {
 const LiveRoom = ({
   roomId,
   userChoices,
-  OnDisconnected,
-  userId
+  OnDisconnected
 }:LiveRoomType) => {
+  console.log("first")
+
+  const {data} =  api.room.joinRoom.useQuery({roomId:roomId})
+  
+  console.log(data)
+
+  const roomOptions = useMemo((): RoomOptions => {
+    return {
+      videoCaptureDefaults: {
+        deviceId: userChoices?.videoDeviceId ?? undefined,
+  
+      },
+      
+      audioCaptureDefaults: {
+        deviceId: userChoices?.audioDeviceId ?? undefined,
+      },
+      adaptiveStream: { pixelDensity: "screen" },
+      dynacast: true,
+    };
+  }, [userChoices]);
   return (
     <LiveKitRoom
          video={true}
          audio={true}
-         token={"token"}
+         token={data?.accessToken}
          serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-         // Use the default LiveKit theme for nice styles.
+         options={roomOptions}
+         onDisconnected={OnDisconnected}
          data-lk-theme="default"
          style={{ height: '100dvh' }}
        >

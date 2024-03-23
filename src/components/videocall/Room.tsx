@@ -5,23 +5,28 @@ import React, { FormEvent, useState } from "react";
 import LiveRoom from "~/components/videocall/LiveRoom";
 import Prejoin from "~/components/videocall/Prejoin";
 
-const Room = async({params}:{params:{roomId:string}}) => {
-  // const sessionUser= await getCurrentUser()
-  // const router = useRouter()
+export interface userType{
+  id: string;
+  isOAuth: boolean;
+  email: string;
+  name?: string | null | undefined;
+  image?: string | null | undefined;
+}
 
-  // if(!sessionUser || !sessionUser.id){
-  //   router.push("/auth/login")
-  //   return
-  // }
+const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
+  
 console.log(params)
+console.log(user)
 
   const [joinIn, setjoinIn] = useState(false);
   const [userJoinChoices, setUserJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
 
 
-  const handlePrejoinValues = (e:FormEvent)=>{
-    e.preventDefault()
+  const handlePrejoinValues = (choice:LocalUserChoices)=>{
+    setUserJoinChoices(choice);
+    setjoinIn(true)
   }
+  console.log(joinIn)
 
   return (
     <div className="flex h-screen w-full items-center justify-center">
@@ -30,10 +35,14 @@ console.log(params)
          roomId={params.roomId}
          userChoices={userJoinChoices}
          OnDisconnected={() => setUserJoinChoices(undefined)}
-         userId={"1"}></LiveRoom>
+         userId={user?.id}
+         ></LiveRoom>
       ) : (
-       <Prejoin roomId={params.roomId} />
+       <Prejoin roomId={params.roomId} user={user} handlePrejoinValues={handlePrejoinValues}/>
       )}
+
+
+     
     </div>
   );
 };

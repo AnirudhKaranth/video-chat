@@ -121,6 +121,7 @@ export const roomRouter = createTRPCRouter({
         return result;
       } catch (error) {
         console.log(error);
+       
       }
     }),
 
