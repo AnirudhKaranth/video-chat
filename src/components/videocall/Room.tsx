@@ -26,7 +26,7 @@ const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
   console.log(joinIn)
 
   return (
-    <div className="flex h-screen w-full items-center justify-center">
+    <div className="flex h-screen w-full items-center justify-center bg-slate-700">
       {joinIn ? (
          <LiveRoom 
          roomId={params.roomId}
