@@ -79,6 +79,7 @@ model Participant {
     Room   Room @relation(fields: [roomId], references: [id])
 
     @@id([userId, roomId])
+    @@unique([userId, roomId])
     @@index([roomId])
     @@index([userId])
 }

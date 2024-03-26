@@ -101,19 +101,15 @@ export const roomRouter = createTRPCRouter({
             },
           },
         });
-        if (!participant) {
+        console.log("userId: ", ctx.session.user.id)
+        console.log("room :",input.roomId,)
+        console.log("participant: ",participant)
+        if (!participant ) {
+          console.log("first")
           await ctx.db.participant.create({
             data: {
-              user: {
-                connect: {
-                  id: ctx.session.user.id,
-                },
-              },
-              Room: {
-                connect: {
-                  id: input.roomId,
-                },
-              },
+             userId:ctx.session.user.id,
+             roomId:input.roomId
             },
           });
         }

@@ -14,9 +14,6 @@ export interface userType{
 }
 
 const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
-  
-console.log(params)
-console.log(user)
 
   const [joinIn, setjoinIn] = useState(false);
   const [userJoinChoices, setUserJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
@@ -34,7 +31,10 @@ console.log(user)
          <LiveRoom 
          roomId={params.roomId}
          userChoices={userJoinChoices}
-         OnDisconnected={() => setUserJoinChoices(undefined)}
+         OnDisconnected={() => {
+          setUserJoinChoices(undefined)
+          setjoinIn(false)
+        }}
          userId={user?.id}
          ></LiveRoom>
       ) : (

@@ -68,7 +68,7 @@ function MyVideoConference() {
     { onlySubscribed: false },
   );
   return (
-    <GridLayout tracks={tracks} style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}>
+    <GridLayout tracks={tracks} >
       {/* The GridLayout accepts zero or one child. The child is used
       as a template to render all passed in tracks. */}
       <ParticipantTile />
