@@ -4,6 +4,7 @@ import { RoomOptions, Track } from 'livekit-client';
 import React, { useMemo } from 'react'
 import { api } from '~/trpc/react';
 
+
 type LiveRoomType = {
   roomId: string;
   userChoices?: LocalUserChoices;
@@ -45,14 +46,20 @@ const LiveRoom = ({
          options={roomOptions}
          onDisconnected={OnDisconnected}
          data-lk-theme="default"
-         style={{ height: '100dvh' }}
+         style={{ height:'h-full', display:"flex", flexDirection:"column", border:"black", borderWidth:"2px", backgroundColor:"gray"}}
        >
          {/* Your custom component with basic video conferencing functionality. */}
+        <div className='flex '>
          <MyVideoConference />
+
+        </div>
          <RoomAudioRenderer />
          {/* Controls for the user to start/stop audio, video, and screen
          share tracks and to leave the room. */}
-         <ControlBar />
+         <div className='border-2 border-black'>
+
+         <ControlBar style={{height:"80px", display:"flex"}} />
+         </div>
        </LiveKitRoom>
   )
 }
@@ -68,10 +75,10 @@ function MyVideoConference() {
     { onlySubscribed: false },
   );
   return (
-    <GridLayout tracks={tracks} >
+    <GridLayout tracks={tracks}  className='bg-blue-500  border-2 border-green-400 ' >
       {/* The GridLayout accepts zero or one child. The child is used
       as a template to render all passed in tracks. */}
-      <ParticipantTile />
+      <ParticipantTile className='border-2 border-red-800'/>
     </GridLayout>
   );
 }
