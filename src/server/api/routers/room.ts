@@ -101,17 +101,27 @@ export const roomRouter = createTRPCRouter({
             },
           },
         });
-        console.log("userId: ", ctx.session.user.id)
-        console.log("room :",input.roomId,)
-        console.log("participant: ",participant)
+        
         if (!participant ) {
-          console.log("first")
           await ctx.db.participant.create({
             data: {
              userId:ctx.session.user.id,
-             roomId:input.roomId
+             roomId:input.roomId,
+             isActive:true
             },
           });
+        }else{
+          await ctx.db.participant.update({
+            where:{
+              userId_roomId:{
+                roomId:input.roomId,
+                userId:ctx.session.user.id
+              }
+            },
+            data:{
+              isActive:true
+            }
+          })
         }
 
         return result;
@@ -143,4 +153,31 @@ export const roomRouter = createTRPCRouter({
     
         return rooms;
       }),
+
+
+      leaveRoom: protectedProcedure
+      .input(
+        z.object({
+          roomId: z.string(),
+        }),
+      ).mutation(async({ctx, input})=>{
+
+       try {
+         await ctx.db.participant.update({
+           where:{
+             userId_roomId:{
+               roomId:input.roomId,
+               userId:ctx.session.user.id
+             }
+           },
+           data:{
+             isActive:false
+           }
+         })
+ return "left the room"
+       } catch (error) {
+        console.log(error)
+       }
+
+      })
 });

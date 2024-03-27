@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import LiveRoom from "~/components/videocall/LiveRoom";
 import Prejoin from "~/components/videocall/Prejoin";
+import { api } from "~/trpc/react";
 
 export interface userType{
   id: string;
@@ -19,9 +20,16 @@ const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
   const [userJoinChoices, setUserJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
 
 
+  const leaveRoom= api.room.leaveRoom.useMutation();
   const handlePrejoinValues = (choice:LocalUserChoices)=>{
     setUserJoinChoices(choice);
     setjoinIn(true)
+  }
+
+  const handleEndConnection = async()=>{
+    await leaveRoom.mutateAsync({roomId:params.roomId})
+    setUserJoinChoices(undefined)
+    setjoinIn(false)
   }
   console.log(joinIn)
 
@@ -31,10 +39,7 @@ const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
          <LiveRoom 
          roomId={params.roomId}
          userChoices={userJoinChoices}
-         OnDisconnected={() => {
-          setUserJoinChoices(undefined)
-          setjoinIn(false)
-        }}
+         OnDisconnected={handleEndConnection}
          userId={user?.id}
          ></LiveRoom>
       ) : (
