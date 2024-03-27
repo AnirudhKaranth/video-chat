@@ -29,19 +29,19 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
     <div className="bg-gray-900 h-screen flex flex-col justify-center items-center">
       <Navbar handleLogout={handleLogout} />
       <div className="bg-gray-800 rounded-lg p-8 flex flex-col items-center">
-        <p className="text-xl text-white mb-6">Welcome to Stream Flow</p>
-        <div className="flex flex-col gap-4">
+        <p className="text-4xl text-white mb-6">Welcome to Stream Flow</p>
+        <div className="flex gap-4">
           <button
             type="button"
             onClick={handleCreateRoom}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mb-4"
+            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
           >
             Create Meeting
           </button>
           <button
             type="button"
             onClick={() => router.push("/rooms/join")}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
           >
             Join Meeting
           </button>
@@ -49,6 +49,7 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
       </div>
     </div>
   );
+  
 };
 
 export default HomePage;
