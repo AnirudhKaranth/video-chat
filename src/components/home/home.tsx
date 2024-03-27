@@ -29,7 +29,7 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
     <div className="bg-gray-900 h-screen flex flex-col justify-center items-center">
       <Navbar handleLogout={handleLogout} />
       <div className="bg-gray-800 rounded-lg p-8 flex flex-col items-center">
-        <p className="text-xl text-white mb-6">Welcome to Your Meeting Hub</p>
+        <p className="text-xl text-white mb-6">Welcome to Stream Flow</p>
         <div className="flex flex-col gap-4">
           <button
             type="button"

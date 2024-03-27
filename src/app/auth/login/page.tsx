@@ -10,7 +10,7 @@ const LoginPage = async() => {
     return <Home/>
   }
   return (
-    <div className='flex items-center justify-center bg-gray-100 h-screen w-full'>
+    <div className='flex items-center justify-center bg-gray-900 h-screen w-full'>
       <SignInForm session={session}/>
     </div>
   )

@@ -69,9 +69,9 @@ export function SignInForm({ session }: { session: SessionType | null }) {
   }
 
   return (
-    <div className="flex flex-col border-2 border-gray-50 bg-white rounded-md p-7 shadow-sm ">
+    <div className="flex flex-col border-2 border-gray-500 bg-gray-800 rounded-md p-7 shadow-sm ">
     <div className="w-full flex items-center justify-center ">
-            <p className="text-2xl">Login</p>
+            <p className="text-2xl text-white">Login</p>
         </div>
     <Form {...form}>
       
@@ -115,7 +115,7 @@ export function SignInForm({ session }: { session: SessionType | null }) {
       </form>
     </Form>
     <div className="mt-4 w-full flex items-center justify-center">
-        <button type="button" className="text-sm text-gray-500 hover:text-gray-600" onClick={async ()=> router.push("/auth/signup")}>Don't have an account? signUp</button>
+        <button type="button" className="text-sm text-gray-500 hover:text-gray-50" onClick={async ()=> router.push("/auth/signup")}>Don't have an account? signUp</button>
 
     </div>
           </div>

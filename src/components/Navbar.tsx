@@ -1,23 +1,26 @@
+"use client"
 import { signOut } from 'next-auth/react';
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
+
   return (
     <div className='fixed top-0 w-full h-20 bg-gray-800 flex items-center justify-around shadow-md text-white'>
-      <div className="flex items-center justify-center w-1/4">
+      <Link  href="/" className="flex items-center justify-center w-1/4" >
         <Image
         src="/logov2.png"
         width={100}
         height={100}
         alt='Logo'
         />
+      </Link>
+      <div className="w-3/12 flex justify-center">
+        <Link href="/about" className="nav-item">About</Link>
       </div>
       <div className="w-3/12 flex justify-center">
-        <a href="#" className="nav-item">About</a>
-      </div>
-      <div className="w-3/12 flex justify-center">
-        <a href="#" className="nav-item">Contact</a>
+        <Link href="#" className="nav-item">Contact</Link>
       </div>
       <div className="w-1/4 flex items-center justify-center">
         <button type="button" onClick={handleLogout} className="logout-btn">Logout</button>

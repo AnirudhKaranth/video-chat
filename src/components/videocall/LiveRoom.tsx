@@ -46,7 +46,7 @@ const LiveRoom = ({
          options={roomOptions}
          onDisconnected={OnDisconnected}
          data-lk-theme="default"
-         style={{ height:'h-full', display:"flex", flexDirection:"column", border:"black", borderWidth:"2px", backgroundColor:"gray"}}
+         style={{ height:'h-full',width:"full", display:"flex", flexDirection:"column", border:"black", borderWidth:"2px", backgroundColor:"gray"}}
        >
          {/* Your custom component with basic video conferencing functionality. */}
         <div className='flex '>
@@ -58,7 +58,7 @@ const LiveRoom = ({
          share tracks and to leave the room. */}
          <div className='border-2 border-black'>
 
-         <ControlBar style={{height:"80px", display:"flex"}} />
+         <ControlBar style={{height:"80px", display:"flex" , justifyContent:"space-around",}} />
          </div>
        </LiveKitRoom>
   )
@@ -75,10 +75,10 @@ function MyVideoConference() {
     { onlySubscribed: false },
   );
   return (
-    <GridLayout tracks={tracks}  className='bg-blue-500  border-2 border-green-400 ' >
+    <GridLayout tracks={tracks}  className='bg-gray-500 w-full   ' >
       {/* The GridLayout accepts zero or one child. The child is used
       as a template to render all passed in tracks. */}
-      <ParticipantTile className='border-2 border-red-800'/>
+      <ParticipantTile className=''/>
     </GridLayout>
   );
 }
