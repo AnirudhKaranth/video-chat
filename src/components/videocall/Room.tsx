@@ -34,6 +34,7 @@ const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
   console.log(joinIn)
 
   return (
+
     <div className="flex h-screen w-full items-center justify-center bg-red-200 overflow-auto">
       {joinIn ? (
          <LiveRoom 
