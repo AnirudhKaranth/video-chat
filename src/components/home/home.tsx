@@ -12,26 +12,40 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter();
 
-  const createRoom= api.room.createRoom.useMutation();
+  const createRoom = api.room.createRoom.useMutation();
 
- const handleLogout = async (): Promise<void> => {
+  const handleLogout = async (): Promise<void> => {
     await signOut();
     console.log("first");
     router.push("/auth/login");
   };
 
-
-  const handleCreateRoom = async()=>{
-    const response = await createRoom.mutateAsync()
-    router.push(`/rooms/${response.roomName}`)
-  }
+  const handleCreateRoom = async () => {
+    const response = await createRoom.mutateAsync();
+    router.push(`/rooms/${response.roomName}`);
+  };
 
   return (
-    <div>
+    <div className="bg-gray-900 h-screen flex flex-col justify-center items-center">
       <Navbar handleLogout={handleLogout} />
-      <div className="flex justify-center pt-32 gap-6">
-        <button type="button" onClick={handleCreateRoom} className="mx-5 bg-blue-200 hover:bg-blue-400 p-2 rounded-md">Create Meeting</button>
-        <button type="button" onClick={async()=>router.push("/rooms/join")} className="mx-5 bg-blue-200 hover:bg-blue-400 p-2 rounded-md">Join Meeting</button>
+      <div className="bg-gray-800 rounded-lg p-8 flex flex-col items-center">
+        <p className="text-xl text-white mb-6">Welcome to Your Meeting Hub</p>
+        <div className="flex flex-col gap-4">
+          <button
+            type="button"
+            onClick={handleCreateRoom}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mb-4"
+          >
+            Create Meeting
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/rooms/join")}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Join Meeting
+          </button>
+        </div>
       </div>
     </div>
   );

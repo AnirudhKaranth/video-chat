@@ -41,4 +41,5 @@ const Prejoin = ({roomId, user, handlePrejoinValues}:{roomId:string, user:userTy
   )
 }
 
-export default Prejoin
+
+export default Prejoin;
