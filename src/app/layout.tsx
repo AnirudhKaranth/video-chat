@@ -1,4 +1,5 @@
 import "~/styles/globals.css";
+import '@livekit/components-styles';
 
 import { Inter } from "next/font/google";
 

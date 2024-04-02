@@ -14,9 +14,9 @@ const Prejoin = ({roomId, user, handlePrejoinValues}:{roomId:string, user:userTy
     router.push("/auth/login");
   };
   return (
-    <div className='h-screen w-full flex items-center flex-col'>
+    <>
     <Navbar handleLogout={handleLogout}/>
-    <div className="h-3/4 w-3/5 flex flex-col gap-5 items-center justify-center overflow-hodden ">
+    <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
         Joining Room: {roomId}
         <PreJoin 
           className="overflow-visible max-w-96 max-h-96"
@@ -37,7 +37,7 @@ const Prejoin = ({roomId, user, handlePrejoinValues}:{roomId:string, user:userTy
 
         </PreJoin>
   </div>
-          </div>
+          </>
   )
 }
 
