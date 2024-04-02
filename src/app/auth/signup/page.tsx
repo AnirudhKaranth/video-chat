@@ -11,7 +11,7 @@ const SignUpPage = async() => {
     <Home/>
   }
   return (
-    <div className='flex items-center justify-center h-screen w-full bg-gray-50'>
+    <div className='flex items-center justify-center bg-gradient-to-b from-blue-900 via-blue-950 to-gray-900 h-screen w-full'>
         <SignUpForm session={session}/>
     </div>
   )

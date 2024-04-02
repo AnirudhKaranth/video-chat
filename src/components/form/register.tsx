@@ -72,12 +72,12 @@ export function SignUpForm({ session }: { session: SessionType | null }) {
   }
 
   return (
-    <div className="flex flex-col border-2 border-gray-100 bg-white rounded-md p-7 shadow-sm">
-        <div className="w-full flex items-center justify-center mb-3">
-            <p className="text-2xl">Sign Up</p>
+    <div className="flex flex-col border-2 border-gray-500 bg-gray-800 rounded-md p-7 shadow-sm ">
+      <div className="w-full flex items-center justify-center mb-8">
+            <p className="text-2xl text-white">Sign Up</p>
         </div>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col items-center justify-center gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-60 h-72 flex flex-col items-center justify-center gap-2">
         <FormField
           control={form.control}
           name="username"
@@ -123,7 +123,7 @@ export function SignUpForm({ session }: { session: SessionType | null }) {
     <FcGoogle fontSize={25}/>
     </div> */}
     <div className="mt-4 w-full flex items-center justify-center">
-    <button type="button" className="text-sm text-gray-500 hover:text-gray-600" onClick={async ()=> router.push("/auth/login")}>Already have an account? Login</button>
+    <button type="button" className="text-sm text-white hover:text-gray-300" onClick={async ()=> router.push("/auth/login")}>Already have an account? Login</button>
 
     </div>
     </div>
