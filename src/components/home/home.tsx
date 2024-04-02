@@ -29,27 +29,8 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="bg-gray-900 h-screen flex flex-col justify-center items-center">
-      <Navbar handleLogout={handleLogout} />
-      <div className="bg-gray-800 rounded-lg p-8 flex flex-col items-center">
-        <p className="text-xl text-white mb-6">Welcome to Stream Flow</p>
-        <div className="flex flex-col gap-4">
-          <button
-            type="button"
-            onClick={handleCreateRoom}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mb-4"
-          >
-            Create Meeting
-          </button>
-          <button    
-            type="button"
-            onClick={() => router.push("/rooms/join")}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            Join Meeting
-          </button>
-=======
+
+   
     <div className="bg-gray-900 h-screen flex flex-col">
   <Navbar handleLogout={handleLogout} />
   <div className="mx-auto mt-24">
@@ -60,7 +41,6 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
       <Carousel showThumbs={false} infiniteLoop autoPlay>
         <div>
           <Image src="/sign.png" width={50} height={50} alt="Feature 1" />
->>>>>>> 3e4299a8bf44a3ddecccd6b291214c835734e183
         </div>
         <div>
           <Image src="/vc8.png" width={50} height={50} alt="Feature 2" />
