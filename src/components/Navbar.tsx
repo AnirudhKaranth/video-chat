@@ -28,7 +28,7 @@ const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
       <style jsx>{`
         .nav-item {
           text-decoration: none;
-          color: pink;
+          color: white;
           transition: color 0.3s ease;
         }
         .nav-item:hover {
