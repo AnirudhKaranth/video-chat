@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { useState } from "react";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Image from 'next/image';
 
 const HomePage = ({ session }: { session: SessionType | null }) => {
   const [loading, setLoading] = useState(false)
@@ -26,29 +29,48 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   };
 
   return (
-    <div className="bg-gray-900 h-screen flex flex-col justify-center items-center">
-      <Navbar handleLogout={handleLogout} />
-      <p className="text-4xl text-white mb-6">Welcome to Stream Flow</p>
-      <div className="bg-gray-800 rounded-lg p-8 flex flex-col items-center">
-        
-        <div className="flex gap-4">
-          <button
-            type="button"
-            onClick={handleCreateRoom}
-            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
-          >
-            Create Meeting
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push("/rooms/join")}
-            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
-          >
-            Join Meeting
-          </button>
+    <div className="bg-gray-900 h-screen flex flex-col">
+  <Navbar handleLogout={handleLogout} />
+  <div className="mx-auto mt-24">
+    <p className="text-4xl text-white">Welcome to Stream Flow</p>
+  </div>
+  <div className="flex flex-grow">
+    <div className="flex-grow w-1/3  rounded-lg p-8 flex flex-col justify-center items-center">
+      <Carousel showThumbs={false} infiniteLoop autoPlay>
+        <div>
+          <Image src="/sign.png" width={50} height={50} alt="Feature 1" />
         </div>
+        <div>
+          <Image src="/vc8.png" width={50} height={50} alt="Feature 2" />
+        </div>
+        <div>
+          <Image src="/vc8.png" width={50} height={50} alt="Feature 3" />
+        </div>
+      </Carousel>
+    </div>
+    <div className="w-2/3  rounded-lg p-8 flex flex-col justify-center items-center">
+      <div className="flex flex-col gap-4">
+        <button
+          type="button"
+          onClick={handleCreateRoom}
+          className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
+        >
+          Create Meeting
+        </button>
+        <button
+          type="button"
+          onClick={() => router.push("/rooms/join")}
+          className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
+        >
+          Join Meeting
+        </button>
       </div>
     </div>
+  </div>
+</div>
+
+  
+
   );
   
 };
