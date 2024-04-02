@@ -83,7 +83,7 @@ export function SignInForm({ session }: { session: SessionType | null }) {
               <FormItem>
               <FormControl>
                 <Input 
-                placeholder="email" 
+                placeholder="Email" 
                 {...field} 
                 />
               </FormControl>
@@ -115,7 +115,7 @@ export function SignInForm({ session }: { session: SessionType | null }) {
       </form>
     </Form>
     <div className="mt-4 w-full flex items-center justify-center">
-        <button type="button" className="text-sm text-gray-500 hover:text-gray-50" onClick={async ()=> router.push("/auth/signup")}>Don't have an account? signUp</button>
+        <button type="button" className="text-sm text-white hover:text-gray-300" onClick={async ()=> router.push("/auth/signup")}>Don't have an account? SignUp</button>
 
     </div>
           </div>

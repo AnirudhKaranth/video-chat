@@ -32,7 +32,7 @@ const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
           transition: color 0.3s ease;
         }
         .nav-item:hover {
-          color: #3b82f6; /* Blue color from homepage */
+          color: #2563eb; /* Blue color from homepage */
         }
         .logout-btn {
           padding: 8px 16px;
@@ -41,11 +41,15 @@ const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
           border: none;
           border-radius: 4px;
           cursor: pointer;
-          transition: background-color 0.3s ease;
+          transition: background-color 0.3s ease, transform 0.3s ease-in-out, box-shadow 0.3s ease;
         }
+        
         .logout-btn:hover {
-          background-color: #2563eb; /* Darker shade of blue */
+          background-color: #2563eb; /* Lighter shade of blue */
+          transform: translateY(-1px) scale(1.1);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        
       `}</style>
     </div>
   );
