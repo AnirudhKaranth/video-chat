@@ -29,6 +29,8 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   };
 
   return (
+
+   
     <div className="bg-gray-900 h-screen flex flex-col">
   <Navbar handleLogout={handleLogout} />
   <div className="mx-auto mt-24">

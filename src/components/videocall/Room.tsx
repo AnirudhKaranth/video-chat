@@ -5,6 +5,8 @@ import React, { FormEvent, useState } from "react";
 import LiveRoom from "~/components/videocall/LiveRoom";
 import Prejoin from "~/components/videocall/Prejoin";
 import { api } from "~/trpc/react";
+import '@livekit/components-styles';
+import Navbar from "../Navbar";
 
 export interface userType{
   id: string;
@@ -34,8 +36,7 @@ const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
   console.log(joinIn)
 
   return (
-
-    <div className="flex h-screen w-full items-center justify-center bg-slate-700 overflow-auto">
+    <main data-lk-theme="default">
       {joinIn ? (
          <LiveRoom 
          roomId={params.roomId}
@@ -49,7 +50,7 @@ const Room = ({params, user}:{params:{roomId:string}, user:userType }) => {
 
 
      
-    </div>
+    </main>
   );
 };
 
