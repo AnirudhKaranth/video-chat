@@ -29,50 +29,68 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   };
 
   return (
-
-   
-    <div className="bg-gray-900 h-screen flex flex-col">
-  <Navbar handleLogout={handleLogout} />
-  <div className="mx-auto mt-24">
-    <p className="text-4xl text-white">Welcome to Stream Flow</p>
-  </div>
-  <div className="flex flex-grow">
-    <div className="flex-grow w-1/3  rounded-lg p-8 flex flex-col justify-center items-center">
-      <Carousel showThumbs={false} infiniteLoop autoPlay>
-        <div>
-          <Image src="/sign.png" width={50} height={50} alt="Feature 1" />
+    <div className="bg-gray-900 h-screen flex flex-col relative">
+    <Image
+      src="/4239318_90419.svg"
+      width={100}
+      height={100}
+      className="absolute inset-0 w-full h-full object-cover z-0"
+      alt="Background Image"
+    />
+    <Navbar handleLogout={handleLogout} />
+    <div className="flex flex-grow">
+      <div className="flex-grow w-1/3 rounded-lg pl-24 flex flex-col justify-center items-center z-10">
+        <Carousel showThumbs={false} infiniteLoop autoPlay>
+          <div>
+            <div className="relative">
+              <Image src="/12463944_4969391.svg" width={100} height={100} alt="Feature 1" />
+              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
+                <h2 className="text-lg font-semibold">Connect seamlessly, express freely. Elevate your conversations with our intuitive video chat platform.</h2>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="relative">
+              <Image src="/6438022_3280736.svg" width={100} height={100} alt="Feature 2" />
+              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
+                <h2 className="text-lg font-semibold">Feature 2</h2>
+                <p className="text-sm">Description for Feature 2</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="relative">
+              <Image src="/5544353_52953.svg" width={100} height={100} alt="Feature 3" />
+              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
+                <h2 className="text-lg font-semibold">Feature 3</h2>
+                <p className="text-sm">Description for Feature 3</p>
+              </div>
+            </div>
+          </div>
+        </Carousel>
+      </div>
+      <div className="w-2/3 px-8 py-12 flex flex-col justify-center items-center z-10">
+        <p className="text-4xl text-white mb-6">Welcome to Gesture Talk</p>
+        <p className="text-lg text-white mb-8">Introducing Gesture Talk: Revolutionizing communication with an innovative video chat platform. Seamlessly integrating sign language translation, Gesture Talk empowers individuals of all abilities to engage fully in conversations. By breaking down barriers, we foster inclusivity and enable everyone to connect, share, and belong.</p>
+        <div className="flex flex-col gap-4">
+          <button
+            type="button"
+            onClick={handleCreateRoom}
+            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
+          >
+            Create Meeting
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/rooms/join")}
+            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
+          >
+            Join Meeting
+          </button>
         </div>
-        <div>
-          <Image src="/vc8.png" width={50} height={50} alt="Feature 2" />
-        </div>
-        <div>
-          <Image src="/vc8.png" width={50} height={50} alt="Feature 3" />
-        </div>
-      </Carousel>
-    </div>
-    <div className="w-2/3  rounded-lg p-8 flex flex-col justify-center items-center">
-      <div className="flex flex-col gap-4">
-        <button
-          type="button"
-          onClick={handleCreateRoom}
-          className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
-        >
-          Create Meeting
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/rooms/join")}
-          className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-full flex items-center justify-center"
-        >
-          Join Meeting
-        </button>
       </div>
     </div>
   </div>
-</div>
-
-  
-
   );
   
 };
