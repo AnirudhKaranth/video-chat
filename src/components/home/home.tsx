@@ -31,39 +31,39 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   return (
     <div className="bg-gray-900 h-screen flex flex-col relative">
     <Image
-      src="/4239318_90419.svg"
+      src="/bgimg4.svg"
       width={100}
       height={100}
-      className="absolute inset-0 w-full h-full object-cover z-0"
+      className="absolute inset-0 w-full h-full object-cover z-0 "
       alt="Background Image"
     />
-    <Navbar handleLogout={handleLogout} />
+    <Navbar handleLogout={handleLogout}/>
     <div className="flex flex-grow">
       <div className="flex-grow w-1/3 rounded-lg pl-24 flex flex-col justify-center items-center z-10">
         <Carousel showThumbs={false} infiniteLoop autoPlay>
           <div>
             <div className="relative">
-              <Image src="/12463944_4969391.svg" width={100} height={100} alt="Feature 1" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
-                <h2 className="text-lg font-semibold">Connect seamlessly, express freely. Elevate your conversations with our intuitive video chat platform.</h2>
+              <Image src="/ss1.svg" width={100} height={100} alt="Feature 1" />
+              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-50 text-white py-2 px-4">
+                <h2 className="text-lg font-semibold ">Connect seamlessly, express freely. Elevate your conversations with our intuitive video chat platform.</h2>
               </div>
             </div>
           </div>
           <div>
             <div className="relative">
-              <Image src="/6438022_3280736.svg" width={100} height={100} alt="Feature 2" />
+              <Image src="/ss2.svg" width={100} height={100} alt="Feature 2" />
               <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
-                <h2 className="text-lg font-semibold">Feature 2</h2>
-                <p className="text-sm">Description for Feature 2</p>
+                <h2 className="text-lg font-semibold">Translating your signs now</h2>
+                
               </div>
             </div>
           </div>
           <div>
             <div className="relative">
-              <Image src="/5544353_52953.svg" width={100} height={100} alt="Feature 3" />
+              <Image src="/ss3.svg" width={100} height={100} alt="Feature 3" />
               <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
-                <h2 className="text-lg font-semibold">Feature 3</h2>
-                <p className="text-sm">Description for Feature 3</p>
+                <h2 className="text-lg font-semibold">Talk with the HAND!</h2>
+                
               </div>
             </div>
           </div>
