@@ -10,9 +10,9 @@ const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
     <div className='fixed top-0 w-full h-20 bg-gray-800 flex items-center justify-around shadow-md text-white'>
       <Link  href="/" className="flex items-center justify-center w-1/4" >
         <Image
-        src="/logov2.png"
-        width={100}
-        height={100}
+        src="/snapedit_1712040610628.png"
+        width={200}
+        height={150}
         alt='Logo'
         />
       </Link>
