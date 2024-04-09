@@ -30,49 +30,26 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
 
   return (
     <div className="bg-gray-900 h-screen flex flex-col relative">
+    <Navbar handleLogout={handleLogout}/>
     <Image
-      src="/bgimg4.svg"
+      src="/bgimg9.svg"
       width={100}
       height={100}
-      className="absolute inset-0 w-full h-full object-cover z-0 "
+      className="absolute inset-0 w-full h-full object-cover z-0"
       alt="Background Image"
     />
-    <Navbar handleLogout={handleLogout}/>
+    
     <div className="flex flex-grow">
-      <div className="flex-grow w-1/3 rounded-lg pl-24 flex flex-col justify-center items-center z-10">
-        <Carousel showThumbs={false} infiniteLoop autoPlay>
-          <div>
-            <div className="relative">
-              <Image src="/ss1.svg" width={100} height={100} alt="Feature 1" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-50 text-white py-2 px-4">
-                <h2 className="text-lg font-semibold ">Connect seamlessly, express freely. Elevate your conversations with our intuitive video chat platform.</h2>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="relative">
-              <Image src="/ss2.svg" width={100} height={100} alt="Feature 2" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
-                <h2 className="text-lg font-semibold">Translating your signs now</h2>
-                
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="relative">
-              <Image src="/ss3.svg" width={100} height={100} alt="Feature 3" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-75 text-white py-2 px-4">
-                <h2 className="text-lg font-semibold">Talk with the HAND!</h2>
-                
-              </div>
-            </div>
-          </div>
-        </Carousel>
-      </div>
-      <div className="w-2/3 px-8 py-12 flex flex-col justify-center items-center z-10">
-        <p className="text-4xl text-white mb-6">Welcome to Gesture Talk</p>
+    <div className="flex-grow w-1/2  rounded-lg  flex flex-col justify-center items-center z-10">
+    <div className="relative">
+      <Image src="/ss1.svg" width={500} height={600} alt="Feature 1" />
+    </div>
+  </div>
+
+      <div className="w-1/2 px-8 py-12 flex flex-col justify-center items-center z-10">
+        <p className="text-4xl text-white mb-8">Welcome to Gesture Talk</p>
         <p className="text-lg text-white mb-8">Introducing Gesture Talk: Revolutionizing communication with an innovative video chat platform. Seamlessly integrating sign language translation, Gesture Talk empowers individuals of all abilities to engage fully in conversations. By breaking down barriers, we foster inclusivity and enable everyone to connect, share, and belong.</p>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-4">
           <button
             type="button"
             onClick={handleCreateRoom}
