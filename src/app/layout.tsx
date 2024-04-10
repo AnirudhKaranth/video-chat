@@ -1,14 +1,13 @@
 import "~/styles/globals.css";
 import '@livekit/components-styles';
 
-import { Inter } from "next/font/google";
+
+
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+
+
 
 export const metadata = {
   title: "GestureTalk",
@@ -23,7 +22,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <head></head>
+      <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>

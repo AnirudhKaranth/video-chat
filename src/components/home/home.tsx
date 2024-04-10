@@ -10,7 +10,6 @@ import { useState } from "react";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Image from 'next/image';
-
 const HomePage = ({ session }: { session: SessionType | null }) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter();
@@ -47,7 +46,7 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
   </div>
 
       <div className="w-1/2 px-8 py-12 flex flex-col justify-center items-center z-10">
-        <p className="text-4xl text-white mb-8">Welcome to Gesture Talk</p>
+        <p className="text-4xl text-white mb-8 ">Welcome to <span className="font-mono">GestureTalk</span></p>
         <p className="text-lg text-white mb-8">Introducing Gesture Talk: Revolutionizing communication with an innovative video chat platform. Seamlessly integrating sign language translation, Gesture Talk empowers individuals of all abilities to engage fully in conversations. By breaking down barriers, we foster inclusivity and enable everyone to connect, share, and belong.</p>
         <div className="flex flex-row gap-4">
           <button
