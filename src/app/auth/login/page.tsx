@@ -2,6 +2,7 @@ import React from 'react'
 import Home from '~/app/page';
 import { SignInForm } from '~/components/form/login'
 import { getServerAuthSession } from '~/server/auth';
+import Image from 'next/image';
 
 
 const LoginPage = async() => {
@@ -10,9 +11,16 @@ const LoginPage = async() => {
     return <Home/>
   }
   return (
-    <div className='flex items-center justify-center bg-gradient-to-b from-blue-900 via-blue-950 to-gray-900 h-screen w-full'>
-      <SignInForm session={session}/>
-    </div>
+    <div className='flex items-center justify-center  h-screen w-full'>
+      <Image
+      src="/bgimg4.svg"
+      width={100}
+      height={100}
+      className="absolute inset-0 w-full h-full object-cover z-0"
+      alt="Background Image"
+    />
+    <SignInForm session={session}/>
+  </div>
   )
 }
 

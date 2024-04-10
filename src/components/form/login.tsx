@@ -1,5 +1,5 @@
 "use client"
-
+import Image from 'next/image';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -69,13 +69,20 @@ export function SignInForm({ session }: { session: SessionType | null }) {
   }
 
   return (
-    <div className="flex flex-col border-2 border-gray-500 bg-gray-800 rounded-md p-7 shadow-sm ">
-    <div className="w-full flex items-center justify-center ">
-            <p className="text-2xl text-white">Login</p>
+    <div className="flex flex-col border-double border-4 border-gray-500 bg-gray-800 rounded-3xl p-7 shadow-sm z-10 bg-opacity-50 ">
+      {/* <Image 
+    src="/snapedit_1712040610628.png"
+    width={100}
+    height={100}
+    className=" flex justify-center z-0"
+    alt="Background Image"
+  /> */}
+    <div className="w-full flex items-center justify-center z-10">
+            <p className="text-3xl text-white font-bold z-10">Login</p>
         </div>
     <Form {...form}>
       
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-60 h-72 flex flex-col items-center justify-center gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-60 h-72  flex flex-col items-center justify-center gap-2 z-10">
         <FormField
           control={form.control}
           name="email"
@@ -84,7 +91,8 @@ export function SignInForm({ session }: { session: SessionType | null }) {
               <FormControl>
                 <Input 
                 placeholder="Email" 
-                {...field} 
+                {...field}
+                className="border border-gray-500 rounded-xl p-5" 
                 />
               </FormControl>
              
@@ -102,6 +110,7 @@ export function SignInForm({ session }: { session: SessionType | null }) {
                 type="password"
                 placeholder="Password" 
                 {...field} 
+                className="border border-gray-500 rounded-xl p-5"
                 />
               </FormControl>
               
@@ -111,13 +120,13 @@ export function SignInForm({ session }: { session: SessionType | null }) {
           />
           <FormError message={errorMsg}/>
           <FormSuccess message={successMsg}/>
-        <Button type="submit" className="mt-2">Submit</Button>
+        <Button type="submit" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-700/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-xl text-sm px-5 py-2.5 text-center me-2 mb-2 ">Submit</Button>
       </form>
     </Form>
-    <div className="mt-4 w-full flex items-center justify-center">
-        <button type="button" className="text-sm text-white hover:text-gray-300" onClick={async ()=> router.push("/auth/signup")}>Don't have an account? SignUp</button>
+    <div className="mt-4 w-full flex items-center justify-center z-10">
+        <button type="button" className="text-base text-white hover:text-blue-300 z-10" onClick={async ()=> router.push("/auth/signup")}>Don't have an account? SignUp</button>
 
     </div>
-          </div>
+  </div>
   )
 }
