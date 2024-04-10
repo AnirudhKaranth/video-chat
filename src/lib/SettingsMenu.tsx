@@ -31,13 +31,14 @@ export function SettingsMenu(props: SettingsMenuProps) {
     () => Object.keys(settings) as Array<keyof typeof settings>,
     [settings],
   );
-  const { microphoneTrack } = useLocalParticipant();
+  const { microphoneTrack , cameraTrack} = useLocalParticipant();
 
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
   const [isNoiseFilterEnabled, setIsNoiseFilterEnabled] = React.useState(true);
 
   React.useEffect(() => {
     const micPublication = microphoneTrack;
+    console.log(microphoneTrack, "microphoneTrack")
     if (micPublication && micPublication.track instanceof LocalAudioTrack) {
       const currentProcessor = micPublication.track.getProcessor();
       if (currentProcessor && !isNoiseFilterEnabled) {
@@ -59,6 +60,7 @@ export function SettingsMenu(props: SettingsMenuProps) {
       }
     }
   }, [isNoiseFilterEnabled, microphoneTrack]);
+
 
   return (
     <div className="settings-menu" style={{ width: '100%' }} {...props}>

@@ -34,7 +34,7 @@ const HomePage = ({ session }: { session: SessionType | null }) => {
     <div className="bg-gray-900 h-screen flex flex-col">
   <Navbar handleLogout={handleLogout} />
   <div className="mx-auto mt-24">
-    <p className="text-4xl text-white">Welcome to Stream Flow</p>
+    <p className="text-4xl text-white">Welcome to Gesture Talk</p>
   </div>
   <div className="flex flex-grow">
     <div className="flex-grow w-1/3  rounded-lg p-8 flex flex-col justify-center items-center">
