@@ -1,11 +1,15 @@
 "use client"
 import { ControlBar, GridLayout, LiveKitRoom, LocalUserChoices, ParticipantTile, RoomAudioRenderer, VideoConference, formatChatMessageLinks, useLocalParticipant, useTracks } from '@livekit/components-react'
 import { RoomOptions, Track } from 'livekit-client';
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 // import { DebugMode } from '~/lib/Debug';
 import { SettingsMenu } from '~/lib/SettingsMenu';
 import { api } from '~/trpc/react';
 import '@livekit/components-styles';
+import {Holistic} from '@mediapipe/holistic';
+import {Camera} from "@mediapipe/camera_utils";
+import Webcam from "react-webcam";
+
 
 type LiveRoomType = {
   roomId: string;
@@ -19,12 +23,11 @@ const LiveRoom = ({
   userChoices,
   OnDisconnected
 }:LiveRoomType) => {
-  console.log("first")
+  const webcamRef = useRef<Webcam>(null);
   // const { localParticipant } = useLocalParticipant()
 
   const {data} =  api.room.joinRoom.useQuery({roomId:roomId})
   
-  console.log(data)
 
   const roomOptions = useMemo((): RoomOptions => {
     return {
@@ -41,12 +44,53 @@ const LiveRoom = ({
     };
   }, [userChoices]);
 
-  // const startSignLanguage = async () => {
-  //   const videoTrack = localParticipant.videoTrackPublications;
-  //   console.log(videoTrack)
+  useEffect(() => {
+    const holistic = new Holistic({
+      locateFile: (file: string) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+      }
+    });
+    holistic.setOptions({
+      selfieMode: true,
+      modelComplexity: 1,
+      smoothLandmarks: true,
+      enableSegmentation: true,
+      smoothSegmentation: true,
+      refineFaceLandmarks: true,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5
+    });
+    holistic.onResults((res:any)=> {
+      console.log(res)
+    });
+    
+    
+    if (
+      typeof webcamRef.current !== "undefined" &&
+      webcamRef.current !== null
+      ) {
+        console.log("alo")
+        if (!webcamRef.current?.video) return
+        const camera = new Camera(webcamRef.current.video, {
+          onFrame: async () => {
+            console.log("first frame")
+            if (!webcamRef.current?.video) return
+            await holistic.send({image: webcamRef.current.video});
+          },
+          width: 640,
+          height: 480,
+        });
+        camera.start();
+      }
+      let interval=setInterval(()=>{
+        
+        console.log(webcamRef.current)
+      },10000)
+      return()=>clearInterval(interval);
+    }, [webcamRef.current])
 
-  // }
-  // startSignLanguage()
+    
+
   return (
     <LiveKitRoom
       video={true}
@@ -54,9 +98,20 @@ const LiveRoom = ({
       token={data?.accessToken}
       serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
       // Use the default LiveKit theme for nice styles.
+      onDisconnected={OnDisconnected}
       data-lk-theme="default"
       style={{ height: '100dvh' }}
     >
+      <Webcam
+        ref={webcamRef}
+        style={{
+          // display:"none",
+          zIndex: -2,
+          width: 0,
+          height: 0,
+
+        }}
+      />
       {/* Your custom component with basic video conferencing functionality. */}
       <MyVideoConference />
       {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
@@ -78,6 +133,9 @@ function MyVideoConference() {
     ],
     { onlySubscribed: false },
   );
+
+  
+
   return (
     <GridLayout tracks={tracks} style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}>
       {/* The GridLayout accepts zero or one child. The child is used
