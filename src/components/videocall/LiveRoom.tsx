@@ -45,68 +45,63 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   //   };
   // }, [userChoices]);
 
-  const holistic = new Holistic({
-    locateFile: (file: string) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
-    },
-  });
-  holistic.setOptions({
-    selfieMode: true,
-    modelComplexity: 1,
-    smoothLandmarks: true,
-    enableSegmentation: true,
-    smoothSegmentation: true,
-    refineFaceLandmarks: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5,
-  });
-  holistic.onResults((res: any) => {
-    console.log(res);
-  });
-  // if (typeof webcamRef.current !== "undefined" && webcamRef.current !== null) {
-  //   if (!webcamRef.current?.video) {
-  //     return;
-  //   }
-
-  let camera: Camera | null = null;
-
+  
+  
   useEffect(() => {
+    const holistic:any = new Holistic({
+      locateFile: (file: string) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+      }
+    });
+
+  holistic.onResults((res: any) => {
+    console.log(res)
+    // leftHandLandmarks
+    //rightHandLandmarks
+  })
+
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null
-    ) {
-      if (!webcamRef.current?.video) {
-        return;
-      }
-      camera = new Camera(webcamRef.current.video, {
-        onFrame: async () => {
-          console.log("first frame");
-          if (!webcamRef.current?.video) return;
-          await holistic.send({ image: webcamRef.current.video });
-        },
-        width: 640,
-        height: 480,
-      });
-    }
-  }, [webcamRef.current]);
-
-  const signLanguage = (enable: boolean) => {
-    // if(signLangActive){
-    //   return;
-    // }
-    if (camera) {
-      if (enable) {
-        setIsSignLanguageEnabled(true);
-
+      ) {
+        if (!webcamRef.current?.video) return
+        const camera = new Camera(webcamRef.current.video, {
+          onFrame: async () => {
+            if (!webcamRef.current?.video) return
+            await holistic.send({image: webcamRef.current.video});
+          },
+          width: 640,
+          height: 480,
+        });
         camera.start();
-      } else {
-        setIsSignLanguageEnabled(false);
-        camera.stop();
       }
-    }else{
-      console.log("camera is null")
-    }
-  };
+      let interval=setInterval(()=>{
+
+        console.log(webcamRef.current)
+      },10000)
+      return()=>clearInterval(interval);
+    }, [webcamRef.current])
+
+
+
+  // const signLanguage = (enable: boolean) => {
+  //   // if(signLangActive){
+  //   //   return;
+  //   // }
+  //   console.log(enable)
+  //   if (camera) {
+  //     if (enable) {
+  //       setIsSignLanguageEnabled(true);
+  //       console.log("aaaaa")
+  //       camera.start();
+  //     } else {
+  //       setIsSignLanguageEnabled(false);
+  //       camera.stop();
+  //     }
+  //   }else{
+  //     console.log("camera is null")
+  //   }
+  // };
 
   const connectOptions = React.useMemo((): RoomConnectOptions => {
     return {
@@ -126,7 +121,7 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
       data-lk-theme="default"
       style={{ height: "100dvh" }}
     >
-      {isSignLanguageEnabled && (
+      
         <Webcam
           ref={webcamRef}
           style={{
@@ -136,13 +131,16 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
             height: 0,
           }}
         />
-      )}
+     
       {/* Your custom component with basic video conferencing functionality. */}
       <VideoConference
         chatMessageFormatter={formatChatMessageLinks}
         SettingsComponent={SettingsMenu}
       />
-      <button type="button" disabled={signLangActive} className=" !absolute !left-72 bottom-3 lk-button z-2" onClick={() => signLanguage(!isSignLanguageEnabled)}>{isSignLanguageEnabled?"Diable Sign Lang":"Enable Sign Lang"}</button>
+      <button type="button"  className=" !absolute !left-72 bottom-3 lk-button z-2" onClick={() => {
+        setIsSignLanguageEnabled(!isSignLanguageEnabled)
+        // signLanguage(isSignLanguageEnabled)
+        }}>{isSignLanguageEnabled?"Diable Sign Lang":"Enable Sign Lang"}</button>
     </LiveKitRoom>
   );
 };
