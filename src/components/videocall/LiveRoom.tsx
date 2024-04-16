@@ -27,6 +27,7 @@ type LiveRoomType = {
 
 const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   let predictions:any = [];
+  let actions = ['hello', 'thanks', 'repeat', 'please', 'goodbye', '_'];
   const webcamRef = useRef<Webcam>(null);
   const [isSignLanguageEnabled, setIsSignLanguageEnabled] = useState(false);
   const [signLangActive, setsignLangActive] = useState(false);
@@ -80,22 +81,23 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   holistic.onResults((res: any) => {
     let keypoints = extractKeypoints(res);
     sequence.push(keypoints);
+     sequence = sequence.slice(-20);
     const tensor = tf.tensor(sequence);
-    const tensorSequence = tensor.slice(-10);
     
-    // console.log(sequence)
-    // leftHandLandmarks
-    //rightHandLandmarks
     
-    if ( sequence.length === 10 ) {
+    if ( sequence.length === 20 ) {
       // Convert sequence to a 3D array
       // console.log(tensorSequence.shape)
-      const expandedSequenceTensor = tensorSequence.expandDims(0);
+      const expandedSequenceTensor = tensor.expandDims(0);
     // console.log(expandedSequenceTensor.shape)
       let res = model.predict(expandedSequenceTensor);
       console.log(expandedSequenceTensor.shape)
       console.log("Predictions:  woww: ", res)
-      console.log("data:  woww: ", res.dataSync())
+      // console.log("data:  woww: ", res.dataSync())
+      let maxIndex = res.dataSync().indexOf(Math.max(...res.dataSync()));
+
+// Print the corresponding action from 'actions'
+      console.log(actions[maxIndex]);
 
       // console.log(actions[res.indexOf(Math.max(...res))]); // Assuming `actions` is an array
       // predictions.push(res.indexOf(Math.max(...res)));
