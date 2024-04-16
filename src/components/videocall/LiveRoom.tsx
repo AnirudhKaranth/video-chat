@@ -26,7 +26,6 @@ type LiveRoomType = {
 };
 
 const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
-  let sequence:any = [];
   let predictions:any = [];
   const webcamRef = useRef<Webcam>(null);
   const [isSignLanguageEnabled, setIsSignLanguageEnabled] = useState(false);
@@ -57,15 +56,20 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
     // Concatenate left hand and right hand keypoints
     return lh.concat(rh);
   }
-  const mode=async() => {
-    const model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
-    console.log(model)
-    
-    
+  
+  let model= {} as any;
+  const loadModel=async() => {
+    model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
+    console.log(model)  
   }
+  let sequence:any = [];
+  
+    loadModel()
+  
+  
 
 
-  /*
+  
   useEffect(() => {
     const holistic:any = new Holistic({
       locateFile: (file: string) => {
@@ -76,15 +80,26 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   holistic.onResults((res: any) => {
     let keypoints = extractKeypoints(res);
     sequence.push(keypoints);
-    sequence = sequence.slice(-15);
+    const tensor = tf.tensor(sequence);
+    const tensorSequence = tensor.slice(-10);
+    
+    // console.log(sequence)
     // leftHandLandmarks
     //rightHandLandmarks
-
-    if (sequence.length === 30) {
-      let sequenceInput = [sequence]; // Convert sequence to a 3D array
-      let res = model.predict(sequenceInput)[0];
+    
+    if ( sequence.length === 10 ) {
+      // Convert sequence to a 3D array
+      // console.log(tensorSequence.shape)
+      const expandedSequenceTensor = tensorSequence.expandDims(0);
+    // console.log(expandedSequenceTensor.shape)
+      let res = model.predict(expandedSequenceTensor)[0];
+      console.log("Predictions:  woww: ", res)
       // console.log(actions[res.indexOf(Math.max(...res))]); // Assuming `actions` is an array
       predictions.push(res.indexOf(Math.max(...res)));
+      sequence=[]
+  }else{
+console.log("model not loaded or 15 frames not captured")
+console.log(model)
   }
   })
 
@@ -103,13 +118,14 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
         });
         camera.start();
       }
-      let interval=setInterval(()=>{
+      // let interval=setInterval(()=>{
 
-        console.log(webcamRef.current)
-      },10000)
-      return()=>clearInterval(interval);
+      //   console.log(webcamRef.current)
+      //   console.log(model)
+      // },10000)
+      // return()=>clearInterval(interval);
     }, [webcamRef.current])
-*/
+
 
 
   // const signLanguage = (enable: boolean) => {
@@ -166,7 +182,7 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
         SettingsComponent={SettingsMenu}
       />
       <button type="button"  className=" !absolute !left-72 bottom-3 lk-button z-2" onClick={() => {
-        mode()
+       
         // signLanguage(isSignLanguageEnabled)
         }}>{isSignLanguageEnabled?"Diable Sign Lang":"Enable Sign Lang"}</button>
     </LiveKitRoom>
