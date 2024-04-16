@@ -12,7 +12,9 @@ import styles from '../styles/SettingsMenu.module.css';
 /**
  * @alpha
  */
-export interface SettingsMenuProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface SettingsMenuProps extends React.HTMLAttributes<HTMLDivElement> {
+  toggleSignLanguage?: (enabled: boolean) => void;
+}
 
 /**
  * @alpha
@@ -64,6 +66,14 @@ export function SettingsMenu(props: SettingsMenuProps) {
 
   return (
     <div className="settings-menu" style={{ width: '100%' }} {...props}>
+      <div>
+    <button type="button">
+      <span className="visually-hidden">Toggle Sign Language</span>
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+    </button>
+      </div>
       <div className={styles.tabs}>
         {tabs.map(
           (tab) =>
