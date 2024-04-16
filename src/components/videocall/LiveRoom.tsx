@@ -34,6 +34,7 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   
   const { data } = api.room.joinRoom.useQuery({ roomId: roomId });
   
+  let sequence:any = [];
   
   function extractKeypoints(results:any) {
     let lh = [];
@@ -57,12 +58,11 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
     return lh.concat(rh);
   }
   
-  let model= {} as any;
-  const loadModel=async() => {
-    model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
-    console.log(model)  
-  }
-  let sequence:any = [];
+ let model= {} as any;
+    const loadModel=async() => {
+        model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
+      console.log(model)  
+    }
   
     loadModel()
   
@@ -92,12 +92,16 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
       // console.log(tensorSequence.shape)
       const expandedSequenceTensor = tensorSequence.expandDims(0);
     // console.log(expandedSequenceTensor.shape)
-      let res = model.predict(expandedSequenceTensor)[0];
+      let res = model.predict(expandedSequenceTensor);
+      console.log(expandedSequenceTensor.shape)
       console.log("Predictions:  woww: ", res)
+      console.log("data:  woww: ", res.dataSync())
+
       // console.log(actions[res.indexOf(Math.max(...res))]); // Assuming `actions` is an array
-      predictions.push(res.indexOf(Math.max(...res)));
-      sequence=[]
+      // predictions.push(res.indexOf(Math.max(...res)));
+      
   }else{
+    console.log(sequence.length)
 console.log("model not loaded or 15 frames not captured")
 console.log(model)
   }
