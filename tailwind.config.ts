@@ -58,6 +58,11 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily:
+      {
+        Montserrat: "Montserrat",
+        Wallpoet: "Wallpoet",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

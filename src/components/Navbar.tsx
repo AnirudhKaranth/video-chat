@@ -17,10 +17,10 @@ const Navbar = ({ handleLogout }: { handleLogout: () => void }) => {
     />
   </Link>
   <div className="w-3/12 flex justify-center z-20">
-    <Link href="/about" className="nav-item hover:text-blue-500 transition duration-300">About</Link>
+    <Link href="/about" className="nav-item font-mono text-lg hover:text-blue-500 transition duration-300">About</Link>
   </div>
   <div className="w-3/12 flex justify-center z-20">
-    <Link href="#" className="nav-item hover:text-blue-500 transition duration-300">Contact</Link>
+    <Link href="/contact" className="nav-item font-mono text-lg hover:text-blue-500 transition duration-300">Contact</Link>
   </div>
   <div className="w-1/4 flex items-center justify-center z-20">
     <button type="button" onClick={handleLogout} className=" transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center z-20">Logout</button>

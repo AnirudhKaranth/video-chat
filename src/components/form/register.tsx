@@ -136,7 +136,7 @@ export function SignUpForm({ session }: { session: SessionType | null }) {
       </Button>
     </form>
   </Form>
-  <div className="mt-4 w-full flex items-center justify-center z-10">
+  <div className="mt-8 w-full flex items-center justify-center z-10">
     <button 
       type="button" 
       className="text-base text-white hover:text-blue-300 z-10" 
