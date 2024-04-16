@@ -96,11 +96,7 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
       // console.log("data:  woww: ", res.dataSync())
       let maxIndex = res.dataSync().indexOf(Math.max(...res.dataSync()));
 
-// Print the corresponding action from 'actions'
       console.log(actions[maxIndex]);
-
-      // console.log(actions[res.indexOf(Math.max(...res))]); // Assuming `actions` is an array
-      // predictions.push(res.indexOf(Math.max(...res)));
       
   }else{
     console.log(sequence.length)
