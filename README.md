@@ -1,5 +1,6 @@
 
 Idu video call web app with realtime sign language to voice/text conversion feature.
+complete malpere athiji
 
 # Tech stack
 - [NextJS](https://nextjs.org/)
