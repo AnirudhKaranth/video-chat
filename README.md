@@ -1,7 +1,7 @@
 
 # Gesture Talk
 - Video Conference web app with Sign Language Translator.
-- Python [Deep Learning model](https://github.com/dskarkera23/action-detection-sign-language)
+- [Deep Learning model](https://github.com/dskarkera23/action-detection-sign-language)
 
 ## Tech stack
 - [NextJS](https://nextjs.org/)
