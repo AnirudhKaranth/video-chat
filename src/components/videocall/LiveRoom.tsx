@@ -61,7 +61,7 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   
  let model= {} as any;
     const loadModel=async() => {
-        model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
+        model = await tf.loadLayersModel(env.MODEL_CLOUD_URL);
       console.log(model)  
     }
   
