@@ -34,6 +34,7 @@
     "@trpc/react-query": "^10.45.1",
     "@trpc/server": "^10.45.1",
     "@types/bcryptjs": "^2.4.6",
+    "@types/pusher-js": "^5.1.0",
     "@types/uuid": "^9.0.8",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
