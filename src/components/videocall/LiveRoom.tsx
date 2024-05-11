@@ -16,6 +16,7 @@ import { Holistic } from "@mediapipe/holistic";
 import { Camera } from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import * as tf from '@tensorflow/tfjs';
+import { env } from "process";
 
 
 type LiveRoomType = {
@@ -40,16 +41,18 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   function extractKeypoints(results:any) {
     let lh = [];
     let rh = [];
-    
+    console.log("extractKeypoints: ", results)
     // Extract left hand keypoints
-    if (results.left_hand_landmarks) {
+    if (results.leftHandLandmarks) {
+      console.log("echi saaav marre")
       lh = results.leftHandLandmarks.map((res:any) => [res.x, res.y, res.z]).flat();
     } else {
       lh = Array(21*3).fill(0);
     }
     
     // Extract right hand keypoints
-    if (results.right_hand_landmarks) {
+    if (results.rightHandLandmarks) {
+      console.log(" righted echi saaav marre")
       rh = results.rightHandLandmarks.map((res:any) => [res.x, res.y, res.z]).flat();
     } else {
       rh = Array(21*3).fill(0);
@@ -58,16 +61,14 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
     // Concatenate left hand and right hand keypoints
     return lh.concat(rh);
   }
-  
- let model= {} as any;
-    const loadModel=async() => {
-        model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
-      console.log(model)  
-    }
-  
-    loadModel()
-  
-  
+
+  let model= {} as any;
+  const loadModel=async() => {
+      model = await tf.loadLayersModel("https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json");
+    console.log(model)  
+  }
+
+  loadModel()
 
 
   
@@ -78,8 +79,11 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
       }
     });
 
-  holistic.onResults((res: any) => {
+  holistic.onResults(async(res: any) => {
+    console.log("first: alo ", res)
+
     let keypoints = extractKeypoints(res);
+    // console.log("key: ",keypoints)
     sequence.push(keypoints);
      sequence = sequence.slice(-20);
     const tensor = tf.tensor(sequence);
@@ -89,11 +93,25 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
       // Convert sequence to a 3D array
       // console.log(tensorSequence.shape)
       const expandedSequenceTensor = tensor.expandDims(0);
-    // console.log(expandedSequenceTensor.shape)
+    console.log(expandedSequenceTensor.dataSync())
+    // console.log(sequence)
+
       let res = model.predict(expandedSequenceTensor);
-      console.log(expandedSequenceTensor.shape)
-      console.log("Predictions:  woww: ", res)
-      // console.log("data:  woww: ", res.dataSync())
+
+      // let res = await fetch("http://localhost:8080",{
+      //   method: "POST",
+      //   body: JSON.stringify({data:expandedSequenceTensor}),
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   }
+      // })
+
+      // const {data} = await res.json();
+     
+      // console.log(data)
+      // console.log(expandedSequenceTensor.shape)
+      // console.log("Predictions:  woww: ", data)
+      console.log("data:  woww: ", res.dataSync())
       let maxIndex = res.dataSync().indexOf(Math.max(...res.dataSync()));
 
       console.log(actions[maxIndex]);
@@ -101,7 +119,7 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   }else{
     console.log(sequence.length)
 console.log("model not loaded or 15 frames not captured")
-console.log(model)
+// console.log(model)
   }
   })
 
@@ -120,34 +138,8 @@ console.log(model)
         });
         camera.start();
       }
-      // let interval=setInterval(()=>{
-
-      //   console.log(webcamRef.current)
-      //   console.log(model)
-      // },10000)
-      // return()=>clearInterval(interval);
+      // 
     }, [webcamRef.current])
-
-
-
-  // const signLanguage = (enable: boolean) => {
-  //   // if(signLangActive){
-  //   //   return;
-  //   // }
-  //   console.log(enable)
-  //   if (camera) {
-  //     if (enable) {
-  //       setIsSignLanguageEnabled(true);
-  //       console.log("aaaaa")
-  //       camera.start();
-  //     } else {
-  //       setIsSignLanguageEnabled(false);
-  //       camera.stop();
-  //     }
-  //   }else{
-  //     console.log("camera is null")
-  //   }
-  // };
 
   const connectOptions = React.useMemo((): RoomConnectOptions => {
     return {
