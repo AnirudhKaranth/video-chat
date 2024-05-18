@@ -25,29 +25,31 @@ type LiveRoomType = {
   userId: string;
 };
 
-const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
+const LiveRoom = ({ roomId, userChoices, OnDisconnected , userId}: LiveRoomType) => {
   let predictions: any = [];
   let actions = ["hello", "thanks", "repeat", "please", "goodbye", "_"];
   const webcamRef = useRef<Webcam>(null);
   const [isSignLanguageEnabled, setIsSignLanguageEnabled] = useState(false);
   const [othersUsingSignLanuage, setOthersUsingSignLanuage] = useState(false);
-
-  const [signLangActive, setsignLangActive] = useState(false);
+  const [subTitle, setSubTitle] = useState("");
+  // const [signLangActive, setsignLangActive] = useState(false);
 
   const { data } = api.room.joinRoom.useQuery({ roomId: roomId });
 
   let sequence: any = [];
 
-  const enableSignLanguage= api.room.enableSignLanguage.useMutation();
-  const disableSignLanguage= api.room.disableSignLanguage.useMutation();
+  const enableSignLanguage = api.room.enableSignLanguage.useMutation();
+  const disableSignLanguage = api.room.disableSignLanguage.useMutation();
+  const sendMessage = api.room.sendMessage.useMutation();
 
 
   function extractKeypoints(results: any) {
     let lh = [];
     let rh = [];
-
+    console.log("extractKeypoints: ", results);
     // Extract left hand keypoints
-    if (results.left_hand_landmarks) {
+    if (results.leftHandLandmarks) {
+      console.log("echi saaav marre");
       lh = results.leftHandLandmarks
         .map((res: any) => [res.x, res.y, res.z])
         .flat();
@@ -56,7 +58,8 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
     }
 
     // Extract right hand keypoints
-    if (results.right_hand_landmarks) {
+    if (results.rightHandLandmarks) {
+      console.log(" righted echi saaav marre");
       rh = results.rightHandLandmarks
         .map((res: any) => [res.x, res.y, res.z])
         .flat();
@@ -71,108 +74,137 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
   let model = {} as any;
   const loadModel = async () => {
     model = await tf.loadLayersModel(
-      "https://cloud-object-storage-cos-standard-ufe.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json",
+      process.env.NEXT_PUBLIC_MODEL_URL as string,
     );
     console.log(model);
   };
 
   loadModel();
 
-  const startsignLanguage = async(enable: boolean) => {
+  const startsignLanguage = async (enable: boolean) => {
     if (enable) {
       if (isSignLanguageEnabled || othersUsingSignLanuage) {
+        alert("Someone is already using sign language");
         return;
       }
       await enableSignLanguage.mutateAsync({ roomId: roomId });
-      setIsSignLanguageEnabled(true);  
-      
+      console.log("enable")
+      setIsSignLanguageEnabled(true);
     } else {
       await disableSignLanguage.mutateAsync({ roomId: roomId });
+      console.log("disable")
+
       setIsSignLanguageEnabled(false);
     }
   };
 
-  // useEffect(() => {
-    
-      const pusher = new Pusher("05d0c76ccd2892789ea1", {
-        cluster: "ap2",
-      });
+  const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
+  });
 
-      const channel = pusher.subscribe(roomId);
-      channel.bind("enableSignLanguage", function (data: {
-        userId:string,
-        userName:string,
-      }) {
-        console.log(data.userName);
-      });
+  const channel = pusher.subscribe(roomId);
+  channel.bind(
+    "enableSignLanguage",
+    function (data: { userId: string; userName: string }) {
+      console.log("enable: pusher: ", data.userName);
 
-      channel.bind("disableSignLanguage", function (data: {
-        userId:string,
-        userName:string,
-      }) {
-        console.log(data.userName);
+      if (data.userId !== userId) {
+        setIsSignLanguageEnabled(false)
+        setOthersUsingSignLanuage(true);
+      }
+    },
+  );
+
+  channel.bind(
+    "disableSignLanguage",
+    function (data: { userId: string; userName: string }) {
+      console.log("disable: pusher: ", data.userName);
+
+      if (data.userId !== userId) {
+        setIsSignLanguageEnabled(false)
+        setOthersUsingSignLanuage(false);
+      }
+    },
+  );
+
+  channel.bind(
+    "sendMessage",
+    function (data: { userId: string; userName: string, message: string }) {
+      console.log("sendMessage: pusher: ", data.message);
+      if(data.message=="_"){
+        setSubTitle("")
+        return;
+      }else{
+        setSubTitle(data.userName+" : "+data.message);
+      }
+    },
+  );
+  
+
+
+  useEffect(() => {
+    const holistic: any = new Holistic({
+      locateFile: (file: string) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+      },
+    });
+
+    holistic.onResults(async (res: any) => {
+     
+      let keypoints = extractKeypoints(res);
+     
+      sequence.push(keypoints);
+      sequence = sequence.slice(-20);
+      const tensor = tf.tensor(sequence);
+
+      if (sequence.length === 20) {
+        
+        const expandedSequenceTensor = tensor.expandDims(0);
+        console.log(expandedSequenceTensor.dataSync());
+       
+
+        let res = model.predict(expandedSequenceTensor);
+
+        console.log("data:  woww: ", res.dataSync());
+        let maxIndex = res.dataSync().indexOf(Math.max(...res.dataSync()));
+        if( actions[maxIndex]!=subTitle){
+          await sendMessage.mutateAsync({ roomId: roomId, message: actions[maxIndex] as string });
+        }
+        console.log(actions[maxIndex]);
+      } else {
+        console.log("model not loaded or 15 frames not captured");
+        
+      }
+    });
+
+    if (
+      typeof webcamRef.current !== "undefined" &&
+      webcamRef.current !== null 
+    ) {
+      if (!webcamRef.current?.video) return;
+      const camera = new Camera(webcamRef.current.video, {
+        onFrame: async () => {
+          if (!webcamRef.current?.video) return;
+          await holistic.send({ image: webcamRef.current.video });
+        },
+        width: 640,
+        height: 480,
       });
-    
-  // }, []);
+      if(isSignLanguageEnabled){
+        camera.start();
+
+      }else if(!isSignLanguageEnabled){
+        camera.stop();
+      }
+    }
+    //
+  }, [webcamRef.current, isSignLanguageEnabled]);
 
   const connectOptions = React.useMemo((): RoomConnectOptions => {
     return {
       autoSubscribe: true,
     };
   }, []);
-
-  // useEffect(() => {
-    // if(!isSignLanguageEnabled){
-      // return
-    // }
-    // const holistic: any = new Holistic({
-    //   locateFile: (file: string) => {
-    //     return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
-    //   },
-    // });
-
-    // holistic.onResults((res: any) => {
-    //   let keypoints = extractKeypoints(res);
-    //   sequence.push(keypoints);
-    //   sequence = sequence.slice(-20);
-    //   const tensor = tf.tensor(sequence);
-
-    //   if (sequence.length === 20) {
-    //     // Convert sequence to a 3D array
-    //     // console.log(tensorSequence.shape)
-    //     const expandedSequenceTensor = tensor.expandDims(0);
-    //     // console.log(expandedSequenceTensor.shape)
-    //     let res = model.predict(expandedSequenceTensor);
-    //     console.log(expandedSequenceTensor.shape);
-    //     console.log("Predictions:  woww: ", res);
-    //     // console.log("data:  woww: ", res.dataSync())
-    //     let maxIndex = res.dataSync().indexOf(Math.max(...res.dataSync()));
-
-    //     console.log(actions[maxIndex]);
-    //   } else {
-    //     // console.log(sequence.length);
-    //     console.log("model not loaded or 15 frames not captured");
-    //     // console.log(model);
-    //   }
-    // });
-
-    // if (
-    //   typeof webcamRef.current !== "undefined" &&
-    //   webcamRef.current !== null
-    // ) {
-    //   if (!webcamRef.current?.video) return;
-    //   const camera = new Camera(webcamRef.current.video, {
-    //     onFrame: async () => {
-    //       if (!webcamRef.current?.video) return;
-    //       await holistic.send({ image: webcamRef.current.video });
-    //     },
-    //     width: 640,
-    //     height: 480,
-    //   });
-    //   camera.start();
-    // }
-  // }, [webcamRef.current])
-  
 
   return (
     <LiveKitRoom
@@ -198,16 +230,17 @@ const LiveRoom = ({ roomId, userChoices, OnDisconnected }: LiveRoomType) => {
         />
       )}
 
-      {/* Your custom component with basic video conferencing functionality. */}
+      <div className="z-10 !absolute bottom-24 text-lg" style={{ left: '45%' }}>{subTitle}</div>
+
       <VideoConference
         chatMessageFormatter={formatChatMessageLinks}
         SettingsComponent={SettingsMenu}
       />
       <button
         type="button"
-        className=" lk-button z-2 !absolute !left-72 bottom-3"
+        className=" lk-button z-10 !absolute !left-48 bottom-3"
         onClick={() => {
-          startsignLanguage(!isSignLanguageEnabled)
+          startsignLanguage(!isSignLanguageEnabled);
         }}
       >
         {isSignLanguageEnabled ? "Disable Sign Lang" : "Enable Sign Lang"}

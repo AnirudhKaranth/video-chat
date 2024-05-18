@@ -236,6 +236,7 @@ export const roomRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const userId=ctx.session.user.id
       const userName=ctx.session.user.name
+      console.log("message",input.message)
 
       await pusher.trigger(
         input.roomId,
