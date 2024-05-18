@@ -20,7 +20,7 @@ To set up and run the project, follow these steps:
 1. **Clone the Repository**:
    
      ```bash
-     git clone https://github.com/AnirudhKaranth/stack-overflow-clone.git
+     git clone https://github.com/AnirudhKaranth/video-chat.git
      ```
 2. **Configuration**:
      Configure your database connection and API keys in .env file as given in .env.example file.
