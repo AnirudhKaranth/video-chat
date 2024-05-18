@@ -7,6 +7,7 @@ import {
   AccessTokenOptions,
   VideoGrant,
 } from "livekit-server-sdk";
+import { pusher } from "~/lib/pusher";
 
 const roomService = new RoomServiceClient(
   process.env.NEXT_PUBLIC_LIVEKIT_URL as string,
@@ -179,5 +180,74 @@ export const roomRouter = createTRPCRouter({
         console.log(error)
        }
 
-      })
+      }),
+
+    enableSignLanguage: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId=ctx.session.user.id
+      const userName=ctx.session.user.name
+
+      await pusher.trigger(
+        input.roomId,
+        "enableSignLanguage",
+        {
+          userId: userId,
+          userName: userName,
+        }
+      );
+
+      return "enabled sign language";
+    }),
+
+    disableSignLanguage: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId=ctx.session.user.id
+      const userName=ctx.session.user.name
+
+      await pusher.trigger(
+        input.roomId,
+        "disableSignLanguage",
+        {
+          userId: userId,
+          userName: userName,
+        }
+      );
+
+      return "disabled sign language";
+    }),
+
+    sendMessage: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.string(),
+        message: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId=ctx.session.user.id
+      const userName=ctx.session.user.name
+      console.log("message",input.message)
+
+      await pusher.trigger(
+        input.roomId,
+        "sendMessage",
+        {
+          userId: userId,
+          userName: userName,
+          message:input.message
+        }
+      );
+
+      return "Message sent";
+    })
 });
